@@ -31,6 +31,21 @@ python3 train_difficulty_model_from_norare.py   --norare_zip "Norare CLDF 1.1.zi
 - `norare_training_database_en.csv`（训练数据库）
 - `model_manifest.json`（训练元信息）
 
+
+## 字段含义
+`words_with_difficulty.json` 中新增的字段：
+- `difficulty_freq_0_100`：基于 `words.json` 频率的难度分数（log1p + 分位裁剪 -> 0..100，数值越大越难）。
+- `difficulty_norare_pred_0_100`：NoRaRe 模型预测的难度分数（0..100）。
+- `difficulty_0_100`：融合后的最终难度分数（`freq_weight` + `norare_weight` 加权）。
+
+`norare_training_database_en.csv` 中主要字段说明：
+- `word` / `form_norm`：原始词与小写规范化词形。
+- `aoa_mean` / `prevalence` / `known_pct` / `freq_log` / `cd` / `concreteness`：NoRaRe 词汇规范指标。
+- `*_source_varid`：对应指标的来源变量 ID（来自 NoRaRe）。
+- `difficulty_label_0_100_pca`：仅由 NoRaRe 指标 PCA 得到的难度标签（0..100）。
+- `difficulty_label_0_100`：最终训练标签（可包含词频融合）。
+- `frequency` / `freq_log1p` / `difficulty_freq_0_100` / `freq_weight_used`：仅在启用词频融合时出现。
+
 ## 预测（可选）
 ```bash
 python3 predict_any_word.py --word "abandon" --model difficulty_model_any_word.joblib
@@ -63,3 +78,14 @@ python3 predict_any_word.py --word "abandon" --model difficulty_model_any_word.j
 ## 备注 / Troubleshooting
 - 如果提示缺少依赖，请先安装上面的依赖。
 - 训练过程中可能出现数值警告（PCA/Ridge），但文件仍会正常生成。
+
+## 生成 words.json 的预测结果
+训练完成后，可批量为 `words.json` 生成难度字段：
+
+```bash
+python3 add_difficulty_to_words_json.py   --words_json words.json   --model difficulty_model_any_word.joblib   --out_json words_with_difficulty.json   --freq_weight 0.7   --norare_weight 0.3
+```
+
+输出文件：`words_with_difficulty.json`。
+若只想用模型预测（不融合词频），可设置 `--freq_weight 0 --norare_weight 1`。
+

@@ -1,0 +1,109 @@
+{
+  "created_from": "Norare CLDF 1.1.zip",
+  "cldf_dir_in_zip": "norare_train_model_work/norare-cldf-1.1/cldf",
+  "training_database_file": "norare_training_database_en.csv",
+  "model_file": "difficulty_model_any_word.joblib",
+  "what_the_score_means": "difficulty_0_100 in [0,100]; higher means harder. Predicted latent difficulty built from lexical norms, optionally blended with words.json frequency.",
+  "label_provenance": {
+    "metrics": [
+      "aoa_mean",
+      "prevalence",
+      "known_pct",
+      "freq_log",
+      "cd",
+      "concreteness"
+    ],
+    "metric_sources_variable_ids": {
+      "aoa_mean": [
+        "Kuperman-2012-AoA-ENGLISH_AOA_MEAN",
+        "Cortese-2008-AoA-ENGLISH_AOA_MEAN"
+      ],
+      "prevalence": [
+        "Brysbaert-2019-Prevalence-ENGLISH_PREVALENCE"
+      ],
+      "known_pct": [
+        "Brysbaert-2019-Prevalence-ENGLISH_KNOWN_PERCENTAGE"
+      ],
+      "freq_log": [
+        "VanHeuven-2014-Frequency-ENGLISH_FREQUENCY_LOG",
+        "Brysbaert-2009-Frequency-ENGLISH_FREQUENCY_LOG"
+      ],
+      "cd": [
+        "VanHeuven-2014-Frequency-ENGLISH_CD",
+        "Brysbaert-2009-Frequency-ENGLISH_CD"
+      ],
+      "concreteness": [
+        "Brysbaert-2014-Concreteness-ENGLISH_CONCRETENESS_MEAN"
+      ]
+    },
+    "datasets_used": [
+      {
+        "Dataset_ID": "Brysbaert-2009-Frequency-ENGLISH",
+        "Name": "",
+        "Year": "",
+        "Citation": ""
+      },
+      {
+        "Dataset_ID": "Brysbaert-2014-Concreteness-ENGLISH",
+        "Name": "",
+        "Year": "",
+        "Citation": ""
+      },
+      {
+        "Dataset_ID": "Brysbaert-2019-Prevalence-ENGLISH",
+        "Name": "",
+        "Year": "",
+        "Citation": ""
+      },
+      {
+        "Dataset_ID": "Cortese-2008-AoA-ENGLISH",
+        "Name": "",
+        "Year": "",
+        "Citation": ""
+      },
+      {
+        "Dataset_ID": "Kuperman-2012-AoA-ENGLISH",
+        "Name": "",
+        "Year": "",
+        "Citation": ""
+      },
+      {
+        "Dataset_ID": "VanHeuven-2014-Frequency-ENGLISH",
+        "Name": "",
+        "Year": "",
+        "Citation": ""
+      }
+    ],
+    "pca": {
+      "imputer": "median",
+      "scaler": "standard (z-score)",
+      "n_components": 1,
+      "explained_variance_ratio": 0.47666264744471065,
+      "component_loadings_ordered_as_metric_cols": [
+        -0.3829157979199514,
+        0.46867176813596584,
+        0.40462541472752833,
+        0.5147182921083684,
+        0.40883834333546426,
+        -0.19472243835769937
+      ],
+      "sign_aligned_with": "aoa_mean (higher AoA => harder)",
+      "min_max_scale_to_0_100": true
+    },
+    "training_rows": 2739,
+    "frequency_integration": {
+      "words_json": "words.json",
+      "freq_weight": 0.35,
+      "clip_low_percentile": 1.0,
+      "clip_high_percentile": 99.0,
+      "log_transform": "log1p",
+      "p1": 0.0,
+      "p99": 7.980793305568741,
+      "matched_rows": 1874
+    }
+  },
+  "predictor_provenance": {
+    "model": "Ridge regression on TF-IDF char ngrams (2-4) + word_len",
+    "can_score_any_string": true
+  }
+}
